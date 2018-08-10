@@ -1,0 +1,126 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Sample access control list.
+ */
+/**
+ * Access control rules for mynetwork
+ */
+
+rule All_Read {
+    description: "Allow all participants read access to everything"
+    participant: "org.global.citizens.net.*"
+    operation: READ
+    resource: "org.global.citizens.net.*"
+    action: ALLOW
+}
+
+rule Access_To_Pledge {
+    description: "Allow all participants access to the pledges"
+    participant: "org.global.citizens.net.*"
+    operation: ALL
+    resource: "org.global.citizens.net.ProjectPledge"
+    action: ALLOW
+}
+
+rule GC_Send_Gov {
+    description: "Allow Global Citizens access to SendPledgeToGovOrg transaction"
+    participant: "org.global.citizens.net.GlobalCitizen"
+    operation: ALL
+    resource: "org.global.citizens.net.SendPledgeToGovOrg"
+    action: ALLOW
+}
+
+rule Aid_Create_Pledge {
+    description: "Allow AidOrg access to CreateProjectPledge transaction"
+    participant: "org.global.citizens.net.AidOrg"
+    operation: ALL
+    resource: "org.global.citizens.net.CreateProjectPledge"
+    action: ALLOW
+}
+
+rule Aid_Send_GC {
+  description: "Allow AidOrg access to SendPledgeToGlobalCitizen transaction"
+  participant: "org.global.citizens.net.AidOrg"
+  operation: ALL
+  resource: "org.global.citizens.net.SendPledgeToGlobalCitizen"
+  action: ALLOW
+}
+
+rule Aid_Update_GC {
+  description: "Allow AidOrg access to update global citizens"
+  participant: "org.global.citizens.net.AidOrg"
+  operation: UPDATE
+  resource: "org.global.citizens.net.GlobalCitizen"
+  action: ALLOW
+}
+
+rule Own_Resources {
+  description: "Allow all access to participant's own resources, only if they are the owner"
+  participant(p): "org.global.citizens.net.*"
+  operation: ALL
+  resource(r): "org.global.citizens.net.*"
+  condition: (p.getIdentifier() == r.getIdentifier())
+  action: ALLOW
+}
+
+rule GC_Update_Gov {
+  description: "Allow GC access to update gov org"
+  participant: "org.global.citizens.net.GlobalCitizen"
+  operation: UPDATE
+  resource: "org.global.citizens.net.GovOrg"
+  action: ALLOW
+}
+
+rule Gov_Update_Pledge {
+    description: "Allow GovOrg access to UpdatePledge transaction"
+    participant: "org.global.citizens.net.GovOrg"
+    operation: ALL
+    resource: "org.global.citizens.net.UpdatePledge"
+    action: ALLOW
+}
+
+rule Gov_Transfer_Funds {
+    description: "Allow GovOrg access to TransferFunds transaction"
+    participant: "org.global.citizens.net.GovOrg"
+    operation: ALL
+    resource: "org.global.citizens.net.TransferFunds"
+    action: ALLOW
+}
+
+rule SystemACL {
+  description:  "System ACL to permit all access"
+  participant: "ANY"
+  operation: ALL
+  resource: "org.hyperledger.composer.system.**"
+  action: ALLOW
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
